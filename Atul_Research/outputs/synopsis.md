@@ -1,4 +1,4 @@
-Project Title: AI-Based Personalized Quiz Generation and Evaluation System Using Retrieval-Augmented Generation and Large Language Models
+Project Title: AI-Based Personalised Quiz Generation and Evaluation System Using Retrieval-Augmented Generation and Large Language Models 
 
 Synopsis for Mini Project (KCA 353)
 
@@ -19,7 +19,7 @@ Dr. APJ Abdul Kalam Technical University, Uttar Pradesh
 2026-27
 
 Title
-	AI-Based Personalized Quiz Generation and Evaluation System Using Retrieval-Augmented Generation and Large Language Models
+	AI-Based Personalised Quiz Generation and Evaluation System Using Retrieval-Augmented Generation and Large Language Models
 
 ## 1. Introduction
 
@@ -29,7 +29,9 @@ In particular, automatically generated MCQs frequently suffer from unsupported a
 
 These issues make it difficult for educators to adopt automated generation without extensive review and revision.
 
-The proposed project addresses these issues by combining Retrieval-Augmented Generation (RAG) with LLMs to produce source-grounded MCQs, supported by automated quality evaluation and a human-in-the-loop review workflow. The system is designed as a professor-facing web application built with Java and Spring Boot. Professors upload PDF or text material, which the system processes into embeddings stored in PostgreSQL with pgVector. The RAG pipeline retrieves relevant passages, and an LLM generates structured MCQs. Deterministic validation checks structural correctness, while an LLM-as-a-Judge rubric provides quality scores. Professors review, edit, and approve questions into a question bank. The current semester MVP focuses on document processing, MCQ generation, structural validation, AI-based quality scoring, and professor-controlled question-bank management. Quiz creation, student assignment, student attempts, automatic student scoring, and performance analytics are reserved for future work.
+The proposed project addresses these issues by combining Retrieval-Augmented Generation (RAG) with LLMs to produce source-grounded MCQs, supported by automated quality evaluation and a human-in-the-loop review workflow. The system is designed as a professor-facing web application built with Java and Spring Boot. Professors upload PDF or text material, which the system processes into embeddings stored in PostgreSQL with pgVector. The RAG pipeline retrieves relevant passages, and an LLM generates structured MCQs. Deterministic validation checks structural correctness, while an LLM-as-a-Judge rubric provides quality scores. Professors review, edit, and approve questions into a question bank. The current semester MVP focuses on document processing, MCQ generation, structural validation, AI-based quality scoring, and professor-controlled question-bank management.
+
+Quiz creation, student assignment, student attempts, automatic student scoring, and performance analytics are reserved for future work.
 
 The primary objectives of this project are:
 1. To extract and process uploaded PDF or text course material using Java-compatible document-processing libraries.
@@ -45,7 +47,7 @@ Automatic Question Generation (AQG) has evolved from rule-based and template-dri
 
 On the evaluation side, Moon et al. (2022) proposed Knowledge Dependent Answerability (KDA), a reference-free metric that measures whether a question correctly targets the intended knowledge fact. KDA addresses the limitation of n-gram similarity metrics, which disregard educational value and depend on gold-standard references. Gorgun and Bulut (2024) further emphasized that current evaluation methods remain a bottleneck because of the absence of standardized, cost-effective quality criteria; human evaluation is expensive and inconsistent, crowdsourcing raises reliability concerns, and automatic metrics like BLEU and ROUGE do not capture pedagogical soundness.
 
-Recent generation studies demonstrate both progress and remaining challenges. Badenes-Olmedo and Eyzaguirre (2026) deployed QuerIA, a locally hosted LLM-based system with Bloom-aligned prompting and semantic chunking, at Universidad Politécnica de Madrid, where 341 participants from 17 faculties generated nearly 6,000 questions in one semester. User feedback confirmed the clarity and educational usefulness of the generated items, showing that locally deployable systems can operate at scale. Pradeesh N et al. (2025) integrated RAG with the Ample LMS to automate MCQ generation from PDFs, demonstrating that retrieved source passages improve contextual relevance and reduce the manual workload for educators. Paixão et al. (2025) combined prompt engineering techniques—including role-based prompting, glossary use, one-shot prompting, and self-review—with an LLM-as-a-Judge evaluation system using GPT-4o to assess MCQ validity across format, language, grammar, relevance, and option correctness.
+Recent generation studies demonstrate both progress and remaining challenges. Badenes-Olmedo and Eyzaguirre (2026) deployed QuerIA, a locally hosted LLM-based system with Bloom-aligned prompting and semantic chunking, at Universidad Politécnica de Madrid, where 341 participants from 17 faculties generated nearly 6,000 questions in one semester. User feedback confirmed the clarity and educational usefulness of the generated items, showing that locally deployable systems can operate at scale. Pradeesh et al. (2025) integrated RAG with the Ample LMS to automate MCQ generation from PDFs, demonstrating that retrieved source passages improve contextual relevance and reduce the manual workload for educators. Paixão et al. (2025) combined prompt engineering techniques—including role-based prompting, glossary use, one-shot prompting, and self-review—with an LLM-as-a-Judge evaluation system using GPT-4o to assess MCQ validity across format, language, grammar, relevance, and option correctness.
 
 Empirical psychometric studies report mixed but informative findings. Crk and Gultepe (2026) examined zero-shot, expert-validated LLM-authored MCQs against human-written items and found no statistically significant differences in Item Difficulty, Discrimination Index, Corrected Point-Biserial Correlation, Item Reliability Index, or network-based psychometric comparisons. However, the study also noted that both human and LLM-authored items exhibited low discrimination and moderate reliability, and that expert validation was essential to accept generated questions. These results suggest that LLM-generated MCQs can be fair and well-composed under expert review, but do not establish universal equivalence or eliminate the need for quality assessment.
 
@@ -151,8 +153,8 @@ The system will be evaluated against the following criteria:
 4. **Clarity:** absence of ambiguous wording or grammatical errors.
 5. **Answerability:** whether the question can be answered from the available context.
 6. **Distractor quality:** plausibility of incorrect options relative to the source material.
-7. **Bloom-level alignment:** match between the requested Bloom's taxonomy level and the generated question's cognitive demand.
-8. **Estimated difficulty alignment:** consistency between the model-assigned difficulty label and apparent question complexity.
+7. **Bloom-level alignment:** match between the requested Bloom's taxonomy level and the generated question's cognitive demand, assessed by reviewer judgment against a structured rubric. Exact agreement thresholds are undecided.
+8. **Estimated difficulty alignment:** consistency between the requested difficulty level and the model-estimated difficulty label, assessed using a predefined rubric or categorical agreement. This is an estimate only and does not reflect empirical difficulty derived from student-response data.
 9. **Duplicate rate:** percentage of generated questions that are exact duplicates of items already in the question bank.
 
 ### 4.2 Evaluation Methods and Limitations
@@ -181,7 +183,7 @@ The evaluation includes a baseline comparison between MCQ generation with retrie
 
 ### 4.7 Evidence-Based Claims
 
-Any observed improvements in quality or reductions in unsupported claims will be reported as hypotheses supported by the preliminary sample, not as established outcomes. Statistical claims will be limited to descriptive statistics for the evaluated sample; no broader generalization will be made without further study.
+Results will be reported as observations from the evaluated sample rather than established general conclusions. Any apparent improvement in source support or question quality will be treated as preliminary evidence, with broader claims requiring further evaluation.
 
 ### 4.8 Psychometric Limits
 
@@ -214,6 +216,20 @@ Acceptance checks for the MVP are defined as functional tests for each objective
 
 Functional testing covers these acceptance checks and does not constitute a formal research study of scoring reliability or student learning outcomes.
 
+In addition to functional testing, a planned preliminary evaluation experiment is described in Sections 4.5 and 4.6, including the baseline comparison methodology and evidence-based reporting approach.
+
+### 5.1 Limitations and Assumptions
+
+The following limitations and assumptions apply to the current MVP:
+
+1. **Retrieval errors:** The system depends on retrieving relevant source passages. Retrieved passages may be incomplete, irrelevant, or insufficient to support a generated question, which can affect factual correctness and source support.
+2. **LLM evaluation bias:** LLM-as-a-Judge scores are estimates only. They may be inconsistent, biased by prompt wording or model training data, and do not independently establish factual correctness or pedagogical effectiveness.
+3. **Source quality dependence:** The quality, completeness, and accuracy of generated questions depend partly on the quality, coverage, and organization of the uploaded source material.
+4. **No empirical personalization:** The current professor-facing MVP does not use student performance data or response histories to personalize quizzes. Personalization remains future scope.
+5. **Human review necessity:** Professor or subject-matter review remains necessary before approved questions are used in assessments. The system supports but does not replace human judgment.
+6. **Difficulty estimation limits:** Model-estimated difficulty is an approximate label and is not equivalent to empirical difficulty measured from student-response data.
+7. **Experimental limitations:** Results from a small preliminary sample of 30–50 MCQs may not generalize to other subjects, documents, models, or student populations.
+
 ## 6. Future Scope
 
 The following features and research extensions are outside the current MVP and are planned for subsequent phases:
@@ -235,29 +251,29 @@ The following features and research extensions are outside the current MVP and a
 | Phase 3 | RAG retrieval pipeline, prompt engineering, and structured MCQ generation.                                                                      |
 | Phase 4 | Schema validation, AI-assisted quality evaluation, and professor review UI.                                                                     |
 | Phase 5 | Question bank management and professor workflow testing.                                                                                        |
-| Phase 6 | Functional testing, review of sample generated MCQs and their outputs to identify quality issues and limitations, bug fixes, and documentation. |
+| Phase 6 | Functional testing, planned preliminary evaluation experiment including baseline comparison, analysis of evaluation findings, bug fixes, and documentation. |
 | Phase 7 | Final integration, deployment, and report preparation.                                                                                          |
 
 ## 8. Conclusion
 
-The proposed AI-Based Personalized Quiz Generation and Evaluation System aims to assist educators by automating the creation of source-grounded MCQs through a RAG-enhanced LLM pipeline. By combining automated generation with deterministic validation, rubric-based quality assessment, and professor review, the system addresses key challenges in factual correctness, clarity, and distractor quality.
+The proposed AI-Based Personalised Quiz Generation and Evaluation System aims to assist educators by automating the creation of source-grounded MCQs through a RAG-enhanced LLM pipeline. By combining automated generation with deterministic validation, rubric-based quality assessment, and professor review, the system addresses key challenges in factual correctness, clarity, and distractor quality.
 
 The modular Spring Boot architecture is designed for implementation and evaluation within a three-member team, with future extensions planned for quiz delivery, student assessment, and personalized practice. This project contributes a practical methodology for generating traceable, reviewable assessment items while maintaining academic rigor through structured evaluation and human oversight.
 
 References
 
-[1] G. Kurdi, J. Leo, B. Parsia, U. Sattler, and S. Al-Emari, "A systematic review of automatic question generation for educational purposes," International Journal of Artificial Intelligence in Education, vol. 30, pp. 121–204, 2020, doi: 10.1007/s40593-019-00186-y.
+[1] G. Kurdi, J. Leo, B. Parsia, U. Sattler, and S. Al-Emari, "A systematic review of automatic question generation for educational purposes," Int. J. Artif. Intell. Educ., vol. 30, pp. 121–204, 2020, doi: 10.1007/s40593-019-00186-y.
 
 [2] H. Moon et al., "Evaluating the Knowledge Dependency of Questions," in Proceedings of EMNLP 2022, pp. 10512–10526, doi: 10.18653/v1/2022.emnlp-main.718.
 
-[3] G. Gorgun and O. Bulut, "Current Evaluation Methods are a Bottleneck in Automatic Question Generation," in Proceedings of the AI for Education Workshop at AAAI 2024, 2024.
+[3] G. Gorgun and O. Bulut, "Current Evaluation Methods are a Bottleneck in Automatic Question Generation," in Proceedings of the AAAI Conference on Artificial Intelligence, Vancouver, BC, Canada, 2024, pp. 3–8.
 
-[4] N. Pradeesh et al., "Retrieval-Augmented Generation for Multiple-Choice Questions and Answers Generation," Procedia Computer Science, vol. 259, pp. 504–511, 2025, doi: 10.1016/j.procs.2025.03.352.
+[4] N. Pradeesh, T. Remya, M. G. Thushara, K. A. Krishna, and V. Pranav, "Retrieval-Augmented Generation for Multiple-Choice Questions and Answers Generation," Procedia Computer Science, vol. 259, pp. 504–511, 2025, doi: 10.1016/j.procs.2025.03.352.
 
-[5] T. M. Paixão et al., "Automatic Multiple-Choice Question Generation and Evaluation Systems Based on LLM: A Study Case With University Resolutions," in Proceedings of COLING 2025, pp. 2246–2260, 2025, doi: 10.18653/v1/2025.coling-main.154.
+[5] S. S. Mucciaccia, T. M. Paixão, F. Mutz, A. F. De Souza, C. S. Badue, and T. Oliveira-Santos, "Automatic Multiple-Choice Question Generation and Evaluation Systems Based on LLM: A Study Case With University Resolutions," in Proceedings of COLING 2025, pp. 2246–2260, 2025, doi: 10.18653/v1/2025.coling-main.154.
 
-[6] C. Badenes-Olmedo and P. Eyzaguirre, "QuerIA: adaptive question generation and evaluation in higher education using large language models and contextual learning," Expert Systems with Applications, vol. 301, p. 130140, 2026, doi: 10.1016/j.eswa.2025.130140.
+[6] C. Badenes-Olmedo and P. Eyzaguirre, "QuerIA: adaptive question generation and evaluation in higher education using large language models and contextual learning," Expert Syst. Appl., vol. 301, no. C, p. 130140, Mar. 2026, doi: 10.1016/j.eswa.2025.130140.
 
-[7] M. R. Anwar et al., "MCQs Generation With Large Language Models: A Survey of Methodologies, Evolution, and Open Research Issues," in IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3652006.
+[7] M. R. Anwar, S. Khalid, S. Alshahrani, H. S. M. Bilal, and M. Aldawsari, "MCQs Generation With Large Language Models: A Survey of Methodologies, Evolution, and Open Research Issues," IEEE Access, vol. 14, pp. 10991–11018, 2026, doi: 10.1109/ACCESS.2026.3652006.
 
-[8] I. Crk and E. Gultepe, "Evaluating the instrumental quality of LLM-generated assessment items," Frontiers in Education, vol. 11, p. 1837523, 2026, doi: 10.3389/feduc.2026.1837523.
+[8] I. Crk and E. Gultepe, "Evaluating the instrumental quality of LLM-generated assessment items," Front. Educ., vol. 11, p. 1837523, Jun. 2026, doi: 10.3389/feduc.2026.1837523.
