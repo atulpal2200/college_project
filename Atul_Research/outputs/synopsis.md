@@ -23,7 +23,11 @@ Title
 
 1. Introduction
 
-Preparing high-quality quizzes and assessments manually is a time-consuming and resource-intensive task for educators. With the increasing availability of digital learning materials, there is a growing need for automated systems that can generate relevant, pedagogically sound multiple-choice questions (MCQs) from course content. Existing rule-based and template-based methods often lack flexibility and contextual awareness, while modern Large Language Models (LLMs) face challenges such as factual hallucinations, poor distractor quality, and difficulty in aligning generated questions with specific cognitive levels. In particular, automatically generated MCQs frequently suffer from unsupported answers, ambiguous wording, weak distractors, and unverified difficulty estimates. These issues make it difficult for educators to adopt automated generation without extensive review and revision.
+Preparing high-quality quizzes and assessments manually is a time-consuming and resource-intensive task for educators. With the increasing availability of digital learning materials, there is a growing need for automated systems that can generate relevant, pedagogically sound multiple-choice questions (MCQs) from course content. Existing rule-based and template-based methods often lack flexibility and contextual awareness, while modern Large Language Models (LLMs) face challenges such as factual hallucinations, poor distractor quality, and difficulty in aligning generated questions with specific cognitive levels.
+
+In particular, automatically generated MCQs frequently suffer from unsupported answers, ambiguous wording, weak distractors, and unverified difficulty estimates.
+
+These issues make it difficult for educators to adopt automated generation without extensive review and revision.
 
 The proposed project addresses these issues by combining Retrieval-Augmented Generation (RAG) with LLMs to produce source-grounded MCQs, supported by automated quality evaluation and a human-in-the-loop review workflow. The system is designed as a professor-facing web application built with Java and Spring Boot. Professors upload PDF or text material, which the system processes into embeddings stored in PostgreSQL with pgVector. The RAG pipeline retrieves relevant passages, and an LLM generates structured MCQs. Deterministic validation checks structural correctness, while an LLM-as-a-Judge rubric provides quality scores. Professors review, edit, and approve questions into a question bank. The current semester MVP focuses on document processing, MCQ generation, structural validation, AI-based quality scoring, and professor-controlled question-bank management. Quiz creation, student assignment, student attempts, automatic student scoring, and performance analytics are reserved for future work.
 
@@ -37,18 +41,34 @@ The primary objectives of this project are:
 
 2. Related works
 
-Automatic Question Generation (AQG) has evolved significantly over the past three decades. Kurdi et al. (2020) provided a systematic review of 93 papers published between 2015 and early 2019, identifying a three-phase generic AQG pipeline: Content Identification and Selection, Item Construction, and Quality Assurance and Refinement. Their findings highlighted persistent gaps in controlled difficulty generation, enrichment of question forms, and harmonized evaluation metrics. Moon et al. (2022) later proposed Knowledge Dependent Answerability (KDA), a reference-free metric that measures whether a question correctly targets the intended knowledge fact, addressing the lack of assessment-value-oriented evaluation. Gorgun and Bulut (2024) emphasized that current evaluation methods remain a bottleneck due to the absence of standardized, cost-effective quality criteria. On the generation side, Badenes-Olmedo and Eyzaguirre (2025) demonstrated that locally deployable LLM-based systems with Bloom-aligned prompting can achieve pedagogical validity at scale. Pradeesh N et al. (2025) showed that RAG integration with LMS platforms can automate contextually relevant MCQ generation from PDFs. Paixão et al. (2025) proposed prompt engineering and automatic evaluation systems for university-resolution MCQs. Recent surveys (Anwar et al., 2026) classify modern methodologies into fine-tuning, prompting, pipeline/modular, multi-agent, and hybrid approaches, with RAG emerging as a key technique for grounding generation in external knowledge. Empirical evaluations such as Crk and Gultepe (2026) report no statistically significant differences in the psychometric measures examined between zero-shot, expert-validated LLM-authored MCQs and human-written items.
+Automatic Question Generation (AQG) has evolved significantly over the past three decades. Kurdi et al. (2020) provided a systematic review of 93 papers published between 2015 and early 2019, identifying a three-phase generic AQG pipeline: Content Identification and Selection, Item Construction, and Quality Assurance and Refinement. Their findings highlighted persistent gaps in controlled difficulty generation, enrichment of question forms, and harmonized evaluation metrics.
+
+Moon et al. (2022) later proposed Knowledge Dependent Answerability (KDA), a reference-free metric that measures whether a question correctly targets the intended knowledge fact, addressing the lack of assessment-value-oriented evaluation.
+
+Gorgun and Bulut (2024) emphasized that current evaluation methods remain a bottleneck due to the absence of standardized, cost-effective quality criteria.
+
+On the generation side, Badenes-Olmedo and Eyzaguirre (2025) demonstrated that locally deployable LLM-based systems with Bloom-aligned prompting can achieve pedagogical validity at scale. Pradeesh N et al. (2025) showed that RAG integration with LMS platforms can automate contextually relevant MCQ generation from PDFs. Paixão et al. (2025) proposed prompt engineering and automatic evaluation systems for university-resolution MCQs.
+
+Recent surveys (Anwar et al., 2026) classify modern methodologies into fine-tuning, prompting, pipeline/modular, multi-agent, and hybrid approaches, with RAG emerging as a key technique for grounding generation in external knowledge.
+
+Empirical evaluations such as Crk and Gultepe (2026) report no statistically significant differences in the psychometric measures examined between zero-shot, expert-validated LLM-authored MCQs and human-written items.
 
 3. Existing / Proposed Methodology
 
 The proposed system follows a modular architecture built on a Spring Boot backend with PostgreSQL for relational data and pgVector for embedding storage and similarity search. The RAG pipeline processes uploaded PDF or text material through the following stages:
 
 1. Document Ingestion and Text Extraction: PDFs are parsed using Apache PDFBox and text is cleaned and normalized. Content is split into manageable chunks using a character-based splitter with overlapping segments to preserve context.
+
 2. Embedding and Vector Storage: Text chunks are embedded using a pre-trained embedding model accessible via Java-compatible SDK or HTTP API and stored in a pgVector-backed vector store for efficient semantic retrieval.
+
 3. Retrieval-Augmented Generation: When a professor requests MCQs on a topic, the system retrieves the most relevant document chunks via cosine similarity and constructs a prompt that includes the source context, desired difficulty level, and Bloom's taxonomy alignment.
+
 4. Structured MCQ Generation: An LLM (e.g., LLaMA 3-8B or GPT-4, to be finalized during implementation) generates the question stem, four options, correct answer, explanation, topic, and difficulty estimate in a structured JSON format.
-5. Schema Validation: A deterministic validator checks the output structure, ensuring exactly four distinct options, exactly one designated correct answer, and non-empty required fields.
+
+5. Schema Validation: A deterministic validator checks the output structure, ensuring exactly four distinct options, exactly one designated correct answer, and non-empty required fields. These checks validate MCQ structure, not student responses.
+
 6. Automated Quality Evaluation: An LLM-as-a-Judge quality assessor scores the MCQ on correctness and support from retrieved source material, relevance to the requested topic, clarity and unambiguous wording, answerability from the available context, plausibility of distractors, and appropriateness of estimated difficulty. Criterion-level scores and concise explanations are returned. The scoring scale and thresholds are to be finalized during implementation.
+
 7. Professor Review and Approval: Generated questions and their AI scores are presented to the professor, who can edit, reject, or approve them. Approved questions enter the question bank.
 
 The schematic below illustrates the proposed RAG-based MCQ generation and evaluation workflow:
@@ -111,17 +131,34 @@ flowchart TD
 4. Expected Results
 
 The expected outcomes of the proposed system include:
+
 - A working professor-facing web application for MCQ generation from uploaded course material.
 - Traceable links between each generated question and the retrieved source passages used for its generation.
 - Deterministic schema validation and rubric-based quality assessment for all generated MCQs.
 - A professor-controlled approval workflow for editing, rejecting, or archiving generated questions.
 - A curated question bank that supports review and reuse of approved items.
-- An evaluation report documenting quality ratings, common failure modes, and system limitations.
-- A documented baseline comparison of generation quality across selected prompt strategies or model configurations, if included in the evaluation plan.
+- An evaluation report documenting functional test results, observed output quality, common failure cases, and system limitations.
+
+Acceptance checks for the MVP are defined as functional tests for each objective:
+
+1. PDF/text extraction: Uploaded documents are processed into extractable, normalized text chunks.
+
+2. Embedding and retrieval: Relevant source passages are retrieved for a given topic query.
+
+3. MCQ generation: The system produces structured MCQs with the required fields in valid JSON.
+
+4. Structural validation: Generated MCQs pass schema checks, including exactly four distinct options, exactly one designated correct answer, and non-empty required fields.
+
+5. AI rubric scoring: Each generated MCQ receives criterion-level scores and explanations for the six rubric dimensions.
+
+6. Professor interface: Generated MCQs and AI scores are displayed, and approved questions are stored in the question bank.
+
+Functional testing covers these acceptance checks and does not constitute a formal research study of scoring reliability or student learning outcomes.
 
 5. Future Scope
 
 The following features and research extensions are outside the current MVP and are planned for subsequent phases:
+
 - Quiz creation and assignment to classes or individual students.
 - Student quiz attempts, automatic scoring, and performance tracking.
 - Topic-level performance analytics, identification of weak and strong topics, and personalized practice recommendations.
@@ -133,16 +170,24 @@ The following features and research extensions are outside the current MVP and a
 6. Plan of work
 
 Phase 1 (Weeks 1-2): Requirement finalization, ERD design, and technology stack setup.
+
 Phase 2 (Weeks 3-4): PDF/text extraction, chunking, embedding, and pgVector integration.
+
 Phase 3 (Weeks 5-6): RAG retrieval pipeline, prompt engineering, and structured MCQ generation.
+
 Phase 4 (Weeks 7-8): Schema validation, AI-assisted quality evaluation, and professor review UI.
+
 Phase 5 (Weeks 9-10): Question bank management and professor workflow testing.
+
 Phase 6 (Weeks 11-12): Functional testing, small-scale quality evaluation, bug fixes, and documentation.
+
 Phase 7 (Weeks 13-14): Final integration, deployment, and report preparation.
 
 7. Conclusion
 
-The proposed AI-Based Personalized Quiz Generation and Evaluation System aims to assist educators by automating the creation of source-grounded MCQs through a RAG-enhanced LLM pipeline. By combining automated generation with deterministic validation, rubric-based quality assessment, and professor review, the system addresses key challenges in factual correctness, clarity, and distractor quality. The modular Spring Boot architecture is designed for implementation and evaluation within a three-member team, with future extensions planned for quiz delivery, student assessment, and personalized practice. This project contributes a practical methodology for generating traceable, reviewable assessment items while maintaining academic rigor through structured evaluation and human oversight.
+The proposed AI-Based Personalized Quiz Generation and Evaluation System aims to assist educators by automating the creation of source-grounded MCQs through a RAG-enhanced LLM pipeline. By combining automated generation with deterministic validation, rubric-based quality assessment, and professor review, the system addresses key challenges in factual correctness, clarity, and distractor quality.
+
+The modular Spring Boot architecture is designed for implementation and evaluation within a three-member team, with future extensions planned for quiz delivery, student assessment, and personalized practice. This project contributes a practical methodology for generating traceable, reviewable assessment items while maintaining academic rigor through structured evaluation and human oversight.
 
 References
 
