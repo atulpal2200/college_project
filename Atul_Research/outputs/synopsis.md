@@ -137,7 +137,57 @@ The following design decisions remain open and will be finalized during a later 
 - LLM-as-a-Judge scoring scale and thresholds
 - Chunk size and overlap parameters for text splitting
 
-## 4. Expected Results
+## 4. Evaluation Methodology
+
+The evaluation plan combines programmatic functional tests, automated quality assessment, and a planned preliminary human review. Formal research evaluation of scoring reliability and student learning outcomes remains outside the current MVP.
+
+### 4.1 Measurable Criteria
+
+The system will be evaluated against the following criteria:
+
+1. **Structural validity:** percentage of generated MCQs satisfying schema rules.
+2. **Factual correctness and source support:** proportion of questions whose correct answer and explanation are supported by retrieved source passages.
+3. **Relevance:** alignment with the requested topic.
+4. **Clarity:** absence of ambiguous wording or grammatical errors.
+5. **Answerability:** whether the question can be answered from the available context.
+6. **Distractor quality:** plausibility of incorrect options relative to the source material.
+7. **Bloom-level alignment:** match between the requested Bloom's taxonomy level and the generated question's cognitive demand.
+8. **Estimated difficulty alignment:** consistency between the model-assigned difficulty label and apparent question complexity.
+9. **Duplicate rate:** percentage of generated questions that are exact duplicates of items already in the question bank.
+
+### 4.2 Evaluation Methods and Limitations
+
+Each criterion is assessed as follows:
+
+- **Programmatic checks:** Structural validity and exact duplicate detection are implemented as deterministic validators returning pass/fail or exact-match results. They cannot assess semantic quality, factual correctness, or pedagogical soundness.
+- **LLM-as-a-Judge assessment:** An LLM evaluates correctness/source support, relevance, clarity, answerability, distractor quality, Bloom-level alignment, and difficulty alignment using a predefined rubric, returning criterion-level scores and explanations. This is an approximate semantic quality estimate. Limitations include potential bias, inconsistency, and absence of validated ground truth. The scoring scale and thresholds are pending design decisions.
+- **Professor review:** The professor inspects generated questions, supporting evidence, and AI scores, then approves or rejects items. This provides final human judgment but is not a formal inter-rater reliability study.
+
+### 4.3 Judge Limitations
+
+AI-generated scores are estimates only. They may be biased by prompt wording, model training data, or stochastic generation. They do not prove factual correctness, pedagogical effectiveness, or alignment with course objectives. The system supports, but does not replace, professor judgment.
+
+### 4.4 Planned Human Review
+
+A preliminary subject-matter review by two reviewers is proposed as a planned evaluation activity, not an implemented MVP feature. The review would assess a sample of generated MCQs against the criteria above and record inter-rater agreement where feasible. If two-reviewer assessment is infeasible due to time or resource constraints, the limitation will be documented, and evaluation will rely on single-reviewer professor judgment together with functional tests.
+
+### 4.5 Feasible Preliminary Experiment
+
+A preliminary evaluation of 30–50 generated MCQs is proposed, subject to available time and resources. The sampling procedure would select MCQs from a representative set of uploaded source documents across different topics and Bloom's levels. Each item would be reviewed using the criteria and methods described above. This experiment has not been conducted; the plan describes what would be evaluated if resources permit.
+
+### 4.6 Baseline Comparison
+
+The evaluation includes a baseline comparison between MCQ generation with retrieved context (RAG) and generation without retrieved context, keeping the model, prompts, source material, and other settings as consistent as possible. Comparison criteria include the measurable criteria listed in Section 4.1, with particular attention to factual correctness, source support, and distractor plausibility. This comparison is intended as a hypothesis test, not a conclusive proof of superiority.
+
+### 4.7 Evidence-Based Claims
+
+Any observed improvements in quality or reductions in unsupported claims will be reported as hypotheses supported by the preliminary sample, not as established outcomes. Statistical claims will be limited to descriptive statistics for the evaluated sample; no broader generalization will be made without further study.
+
+### 4.8 Psychometric Limits
+
+The project does not claim psychometric equivalence between LLM-generated and human-authored MCQs, nor validated student learning outcomes. Such claims require student-response data, Item Response Theory analysis, and formal reliability studies, all of which are outside the current MVP.
+
+## 5. Expected Results
 
 The expected outcomes of the proposed system include:
 
@@ -164,7 +214,7 @@ Acceptance checks for the MVP are defined as functional tests for each objective
 
 Functional testing covers these acceptance checks and does not constitute a formal research study of scoring reliability or student learning outcomes.
 
-## 5. Future Scope
+## 6. Future Scope
 
 The following features and research extensions are outside the current MVP and are planned for subsequent phases:
 
@@ -176,7 +226,7 @@ The following features and research extensions are outside the current MVP and a
 - Advanced psychometric evaluation and Item Response Theory.
 - Fine-tuning an open-source LLM on domain-specific educational content.
 
-## 6. Plan of work
+## 7. Plan of work
 
 | Phase   | Description                                                                                                                                     |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -188,7 +238,7 @@ The following features and research extensions are outside the current MVP and a
 | Phase 6 | Functional testing, review of sample generated MCQs and their outputs to identify quality issues and limitations, bug fixes, and documentation. |
 | Phase 7 | Final integration, deployment, and report preparation.                                                                                          |
 
-7. Conclusion
+## 8. Conclusion
 
 The proposed AI-Based Personalized Quiz Generation and Evaluation System aims to assist educators by automating the creation of source-grounded MCQs through a RAG-enhanced LLM pipeline. By combining automated generation with deterministic validation, rubric-based quality assessment, and professor review, the system addresses key challenges in factual correctness, clarity, and distractor quality.
 
