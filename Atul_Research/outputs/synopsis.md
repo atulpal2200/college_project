@@ -45,7 +45,7 @@ Automatic Question Generation (AQG) has evolved from rule-based and template-dri
 
 On the evaluation side, Moon et al. (2022) proposed Knowledge Dependent Answerability (KDA), a reference-free metric that measures whether a question correctly targets the intended knowledge fact. KDA addresses the limitation of n-gram similarity metrics, which disregard educational value and depend on gold-standard references. Gorgun and Bulut (2024) further emphasized that current evaluation methods remain a bottleneck because of the absence of standardized, cost-effective quality criteria; human evaluation is expensive and inconsistent, crowdsourcing raises reliability concerns, and automatic metrics like BLEU and ROUGE do not capture pedagogical soundness.
 
-Recent generation studies demonstrate both progress and remaining challenges. Badenes-Olmedo and Eyzaguirre (2025) deployed QuerIA, a locally hosted LLM-based system with Bloom-aligned prompting and semantic chunking, at Universidad Politécnica de Madrid, where 341 participants from 17 faculties generated nearly 6,000 questions in one semester. User feedback confirmed the clarity and educational usefulness of the generated items, showing that locally deployable systems can operate at scale. Pradeesh N et al. (2025) integrated RAG with the Ample LMS to automate MCQ generation from PDFs, demonstrating that retrieved source passages improve contextual relevance and reduce the manual workload for educators. Paixão et al. (2025) combined prompt engineering techniques—including role-based prompting, glossary use, one-shot prompting, and self-review—with an LLM-as-a-Judge evaluation system using GPT-4o to assess MCQ validity across format, language, grammar, relevance, and option correctness.
+Recent generation studies demonstrate both progress and remaining challenges. Badenes-Olmedo and Eyzaguirre (2026) deployed QuerIA, a locally hosted LLM-based system with Bloom-aligned prompting and semantic chunking, at Universidad Politécnica de Madrid, where 341 participants from 17 faculties generated nearly 6,000 questions in one semester. User feedback confirmed the clarity and educational usefulness of the generated items, showing that locally deployable systems can operate at scale. Pradeesh N et al. (2025) integrated RAG with the Ample LMS to automate MCQ generation from PDFs, demonstrating that retrieved source passages improve contextual relevance and reduce the manual workload for educators. Paixão et al. (2025) combined prompt engineering techniques—including role-based prompting, glossary use, one-shot prompting, and self-review—with an LLM-as-a-Judge evaluation system using GPT-4o to assess MCQ validity across format, language, grammar, relevance, and option correctness.
 
 Empirical psychometric studies report mixed but informative findings. Crk and Gultepe (2026) examined zero-shot, expert-validated LLM-authored MCQs against human-written items and found no statistically significant differences in Item Difficulty, Discrimination Index, Corrected Point-Biserial Correlation, Item Reliability Index, or network-based psychometric comparisons. However, the study also noted that both human and LLM-authored items exhibited low discrimination and moderate reliability, and that expert validation was essential to accept generated questions. These results suggest that LLM-generated MCQs can be fair and well-composed under expert review, but do not establish universal equivalence or eliminate the need for quality assessment.
 
@@ -55,21 +55,21 @@ Our proposed system responds to these gaps by combining RAG with LLMs within a J
 
 ## 3. Existing / Proposed Methodology
 
-The proposed system follows a modular architecture built on a Spring Boot backend with PostgreSQL for relational data and pgVector for embedding storage and similarity search. The RAG pipeline processes uploaded PDF or text material through the following stages:
+The proposed system follows a modular architecture built on a Spring Boot backend with PostgreSQL for relational data and pgVector for embedding storage and similarity search. The end-to-end RAG pipeline processes uploaded PDF or text material through the following stages:
 
-1. Document Ingestion and Text Extraction: PDFs are parsed using Apache PDFBox and text is cleaned and normalized. Content is split into manageable chunks using a character-based splitter with overlapping segments to preserve context.
+1. Document Ingestion and Text Extraction: The professor uploads a PDF or text file through the web interface. PDFs are parsed using Apache PDFBox, and the extracted text is cleaned, normalized, and split into manageable chunks using a character-based splitter with overlapping segments to preserve context across chunk boundaries.
 
-2. Embedding and Vector Storage: Text chunks are embedded using a pre-trained embedding model accessible via Java-compatible SDK or HTTP API and stored in a pgVector-backed vector store for efficient semantic retrieval.
+2. Embedding and Vector Storage: Each text chunk is converted into a vector embedding using a pre-trained embedding model accessible via Java-compatible SDK or HTTP API. The resulting embeddings, together with their source chunk metadata, are stored in a pgVector-backed vector store for efficient semantic retrieval.
 
-3. Retrieval-Augmented Generation: When a professor requests MCQs on a topic, the system retrieves the most relevant document chunks via cosine similarity and constructs a prompt that includes the source context, desired difficulty level, and Bloom's taxonomy alignment.
+3. Retrieval-Augmented Generation: When a professor requests MCQs on a specific topic, the system retrieves the most relevant document chunks from the vector store via cosine similarity. A prompt is then constructed that includes the retrieved source passages, the desired topic, and the intended Bloom's taxonomy cognitive level. The system also prompts the LLM to indicate, for each generated question, which source chunk(s) supported the question stem, the correct answer, and the explanation.
 
-4. Structured MCQ Generation: An LLM (e.g., LLaMA 3-8B or GPT-4, to be finalized during implementation) generates the question stem, four options, correct answer, explanation, topic, and difficulty estimate in a structured JSON format.
+4. Structured MCQ Generation: An LLM (e.g., LLaMA 3-8B or GPT-4, to be finalized during implementation) generates the question stem, four options, the designated correct answer, an explanation, the associated topic, and a model-estimated difficulty level in a structured JSON format. Each generated item also records identifiers for the source chunk(s) that supported its content, enabling traceability back to the original document.
 
-5. Schema Validation: A deterministic validator checks the output structure, ensuring exactly four distinct options, exactly one designated correct answer, and non-empty required fields. These checks validate MCQ structure, not student responses.
+5. Schema Validation: A deterministic, programmatic validator checks the output structure of each generated MCQ. It enforces required-field presence, exactly four distinct options, exactly one designated correct answer, and non-empty required fields. It also performs exact duplicate detection by comparing the normalized question stem and options against previously approved items in the question bank. These checks validate the structure and basic integrity of the MCQ; they do not assess factual correctness, pedagogical soundness, or semantic uniqueness.
 
-6. Automated Quality Evaluation: An LLM-as-a-Judge quality assessor scores the MCQ on correctness and support from retrieved source material, relevance to the requested topic, clarity and unambiguous wording, answerability from the available context, plausibility of distractors, and appropriateness of estimated difficulty. Criterion-level scores and concise explanations are returned. The scoring scale and thresholds are to be finalized during implementation.
+6. Automated Quality Evaluation: An LLM-as-a-Judge quality assessor evaluates each structurally valid MCQ using a predefined rubric covering correctness and support from retrieved source material, relevance to the requested topic, clarity and unambiguous wording, answerability from the available context, plausibility of distractors, and appropriateness of the estimated difficulty. Criterion-level scores and concise explanations are returned. The scoring scale and thresholds are to be finalized during implementation. This evaluation is an approximate semantic quality estimate, not a validated measurement of educational effectiveness.
 
-7. Professor Review and Approval: Generated questions and their AI scores are presented to the professor, who can edit, reject, or approve them. Approved questions enter the question bank.
+7. Professor Review and Approval: Generated questions, their associated source passages, AI evaluation scores, and explanations are presented to the professor in the review interface. The professor can inspect the supporting evidence, edit the question or options, reject the item, or approve it. Approved questions, together with their source traceability metadata, evaluation records, and generation parameters, are stored in a curated question bank. Rejected or edited items are retained with revision history where appropriate to support traceability and future refinement.
 
 The schematic below illustrates the proposed RAG-based MCQ generation and evaluation workflow:
 
@@ -127,6 +127,15 @@ flowchart TD
     
     style Future fill:#f9f,stroke:#333,stroke-dasharray:5 5
 ```
+
+### Pending Design Decisions
+
+The following design decisions remain open and will be finalized during a later implementation and planning phase:
+
+- LLM provider and model selection
+- Embedding model selection and hosting approach
+- LLM-as-a-Judge scoring scale and thresholds
+- Chunk size and overlap parameters for text splitting
 
 ## 4. Expected Results
 
@@ -193,11 +202,11 @@ References
 
 [3] G. Gorgun and O. Bulut, "Current Evaluation Methods are a Bottleneck in Automatic Question Generation," in Proceedings of the AI for Education Workshop at AAAI 2024, 2024.
 
-[4] C. Badenes-Olmedo and P. Eyzaguirre, "QuerIA: adaptive question generation and evaluation in higher education using large language models and contextual learning," Expert Systems with Applications, vol. 301, p. 130140, 2025, doi: 10.1016/j.eswa.2025.130140.
+[4] N. Pradeesh et al., "Retrieval-Augmented Generation for Multiple-Choice Questions and Answers Generation," Procedia Computer Science, vol. 259, pp. 504–511, 2025, doi: 10.1016/j.procs.2025.03.352.
 
-[5] N. Pradeesh et al., "Retrieval-Augmented Generation for Multiple-Choice Questions and Answers Generation," Procedia Computer Science, vol. 259, pp. 504–511, 2025, doi: 10.1016/j.procs.2025.03.352.
+[5] T. M. Paixão et al., "Automatic Multiple-Choice Question Generation and Evaluation Systems Based on LLM: A Study Case With University Resolutions," in Proceedings of COLING 2025, pp. 2246–2260, 2025, doi: 10.18653/v1/2025.coling-main.154.
 
-[6] T. M. Paixão et al., "Automatic Multiple-Choice Question Generation and Evaluation Systems Based on LLM: A Study Case With University Resolutions," in Proceedings of COLING 2025, 2025, doi: 10.18653/v1/2025.coling-main.154.
+[6] C. Badenes-Olmedo and P. Eyzaguirre, "QuerIA: adaptive question generation and evaluation in higher education using large language models and contextual learning," Expert Systems with Applications, vol. 301, p. 130140, 2026, doi: 10.1016/j.eswa.2025.130140.
 
 [7] M. R. Anwar et al., "MCQs Generation With Large Language Models: A Survey of Methodologies, Evolution, and Open Research Issues," in IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3652006.
 
