@@ -1,4 +1,4 @@
-Project Title: AI-Based Personalised Quiz Generation and Evaluation System Using Retrieval-Augmented Generation and Large Language Models 
+Project Title: AI-Based Personalised Quiz Generation and Evaluation System 
 
 Synopsis for Mini Project (KCA 353)
 
@@ -19,7 +19,7 @@ Dr. APJ Abdul Kalam Technical University, Uttar Pradesh
 2026-27
 
 Title
-	AI-Based Personalised Quiz Generation and Evaluation System Using Retrieval-Augmented Generation and Large Language Models
+	AI-Based Personalised Quiz Generation and Evaluation System
 
 ## 1. Introduction
 
