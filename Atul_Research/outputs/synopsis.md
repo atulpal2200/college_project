@@ -276,18 +276,18 @@ The modular Spring Boot architecture is designed for implementation and evaluati
 
 References
 
-[1] G. Kurdi, J. Leo, B. Parsia, U. Sattler, and S. Al-Emari, "A systematic review of automatic question generation for educational purposes," Int. J. Artif. Intell. Educ., vol. 30, pp. 121–204, 2020, doi: 10.1007/s40593-019-00186-y.
+[1] G. Kurdi, J. Leo, B. Parsia, U. Sattler, and S. Al-Emari, "A systematic review of automatic question generation for educational purposes," Int. J. Artif. Intell. Educ., vol. 30, pp. 121–204, 2020, doi: 10.1007/s40593-019-00186-y, doi: [https://doi.org/10.1007/s40593-019-00186-y](https://doi.org/10.1007/s40593-019-00186-y).
 
-[2] H. Moon et al., "Evaluating the Knowledge Dependency of Questions," in Proceedings of EMNLP 2022, pp. 10512–10526, doi: 10.18653/v1/2022.emnlp-main.718.
+[2] H. Moon et al., "Evaluating the Knowledge Dependency of Questions," in Proceedings of EMNLP 2022, pp. 10512–10526, doi: 10.18653/v1/2022.emnlp-main.718, doi: [https://doi.org/10.18653/v1/2022.emnlp-main.718](https://doi.org/10.18653/v1/2022.emnlp-main.718).
 
-[3] G. Gorgun and O. Bulut, "Current Evaluation Methods are a Bottleneck in Automatic Question Generation," in Proceedings of the AAAI Conference on Artificial Intelligence, Vancouver, BC, Canada, 2024, pp. 3–8.
+[3] G. Gorgun and O. Bulut, "Current Evaluation Methods are a Bottleneck in Automatic Question Generation," in Proceedings of the AAAI Conference on Artificial Intelligence, Vancouver, BC, Canada, 2024, pp. 3–8, [https://proceedings.mlr.press/v257/gorgun24a.html](https://proceedings.mlr.press/v257/gorgun24a.html).
 
-[4] N. Pradeesh, T. Remya, M. G. Thushara, K. A. Krishna, and V. Pranav, "Retrieval-Augmented Generation for Multiple-Choice Questions and Answers Generation," Procedia Computer Science, vol. 259, pp. 504–511, 2025, doi: 10.1016/j.procs.2025.03.352.
+[4] N. Pradeesh, T. Remya, M. G. Thushara, K. A. Krishna, and V. Pranav, "Retrieval-Augmented Generation for Multiple-Choice Questions and Answers Generation," Procedia Computer Science, vol. 259, pp. 504–511, 2025, doi: 10.1016/j.procs.2025.03.352, doi: [https://doi.org/10.1016/j.procs.2025.03.352](https://doi.org/10.1016/j.procs.2025.03.352).
 
-[5] S. S. Mucciaccia, T. M. Paixão, F. Mutz, A. F. De Souza, C. S. Badue, and T. Oliveira-Santos, "Automatic Multiple-Choice Question Generation and Evaluation Systems Based on LLM: A Study Case With University Resolutions," in Proceedings of COLING 2025, pp. 2246–2260, 2025, doi: 10.18653/v1/2025.coling-main.154.
+[5] S. S. Mucciaccia, T. M. Paixão, F. Mutz, A. F. De Souza, C. S. Badue, and T. Oliveira-Santos, "Automatic Multiple-Choice Question Generation and Evaluation Systems Based on LLM: A Study Case With University Resolutions," in Proceedings of COLING 2025, pp. 2246–2260, 2025, [https://aclanthology.org/2025.coling-main.154/](https://aclanthology.org/2025.coling-main.154/).
 
-[6] C. Badenes-Olmedo and P. Eyzaguirre, "QuerIA: adaptive question generation and evaluation in higher education using large language models and contextual learning," Expert Syst. Appl., vol. 301, no. C, p. 130140, Mar. 2026, doi: 10.1016/j.eswa.2025.130140.
+[6] C. Badenes-Olmedo and P. Eyzaguirre, "QuerIA: adaptive question generation and evaluation in higher education using large language models and contextual learning," Expert Syst. Appl., vol. 301, no. C, p. 130140, Mar. 2026, doi: 10.1016/j.eswa.2025.130140, doi: [https://doi.org/10.1016/j.eswa.2025.130140](https://doi.org/10.1016/j.eswa.2025.130140).
 
-[7] M. R. Anwar, S. Khalid, S. Alshahrani, H. S. M. Bilal, and M. Aldawsari, "MCQs Generation With Large Language Models: A Survey of Methodologies, Evolution, and Open Research Issues," IEEE Access, vol. 14, pp. 10991–11018, 2026, doi: 10.1109/ACCESS.2026.3652006.
+[7] M. R. Anwar, S. Khalid, S. Alshahrani, H. S. M. Bilal, and M. Aldawsari, "MCQs Generation With Large Language Models: A Survey of Methodologies, Evolution, and Open Research Issues," IEEE Access, vol. 14, pp. 10991–11018, 2026, doi: 10.1109/ACCESS.2026.3652006, doi: [https://doi.org/10.1109/ACCESS.2026.3652006](https://doi.org/10.1109/ACCESS.2026.3652006).
 
-[8] I. Crk and E. Gultepe, "Evaluating the instrumental quality of LLM-generated assessment items," Front. Educ., vol. 11, p. 1837523, Jun. 2026, doi: 10.3389/feduc.2026.1837523.
+[8] I. Crk and E. Gultepe, "Evaluating the instrumental quality of LLM-generated assessment items," Front. Educ., vol. 11, p. 1837523, Jun. 2026, doi: 10.3389/feduc.2026.1837523, doi: [https://doi.org/10.3389/feduc.2026.1837523](https://doi.org/10.3389/feduc.2026.1837523).
